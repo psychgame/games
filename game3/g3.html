@@ -1,0 +1,210 @@
+<!doctype html> 
+<html lang="en"> 
+<head> 
+    <meta charset="UTF-8" />
+    <title>Making your first Phaser 3 Game - Part 10</title>
+    <script src="//cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.js"></script>
+    <style type="text/css">
+        body {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+<script type="text/javascript">
+
+var config = {
+    type: Phaser.AUTO,
+    width: 800,
+    height: 600,
+    physics: {
+        default: 'arcade',
+        arcade: {
+            gravity: { y: 0 },
+            debug: false
+        }
+    },
+    scene: {
+        preload: preload,
+        create: create,
+        update: update
+    }
+};
+
+var game = new Phaser.Game(config);
+var score = 0;
+
+function preload ()
+{
+    this.load.image('whitebg', 'assets/white.png');
+    this.load.image('bluebg', 'assets/blue.jpg');
+    this.load.image('up', 'assets/up.png');
+    this.load.image('down', 'assets/down.png');
+    this.load.image('left', 'assets/left.png');
+    this.load.image('right','assets/right.png');
+    this.load.image('garb1', 'assets/garb1.png');
+    this.load.image('garb2', 'assets/garb2.png');
+    this.load.image('garb3', 'assets/garb3.png');
+    this.load.image('garb4', 'assets/garb4.png');
+    this.load.image('garb5', 'assets/garb5.png');
+    this.load.spritesheet('dude', 'assets/dude_sheet.png', { frameWidth: 65, frameHeight: 64 });
+}
+
+var answer = ['up', 'down', 'left', 'right','garb1', 'garb2', 'garb3', 'garb4', 'garb5','garb1', 'garb2', 'garb3', 'garb4', 'garb5',];
+function create ()
+{
+    stage = 0;
+    correct = [0,1,2,3,2,3,1,0,2,3,1];
+    this.add.image(400, 300, 'bluebg');
+    scoreText = this.add.text(320, 16, 'Score: 0', { fontSize: '32px', fill: '#000000' });
+    word = this.add.image(400,100,'up');
+    player = this.physics.add.sprite(400,300,'dude');
+
+
+    // Set player animation for all 4 directions
+    this.anims.create({
+        key: 'left',
+        frames: this.anims.generateFrameNumbers('dude', { start: 160, end: 161 }),
+        frameRate: 10,
+        repeat: -1
+       });
+
+    this.anims.create({
+        key: 'right',
+        frames: this.anims.generateFrameNumbers('dude', { start: 184, end: 185 }),
+        frameRate: 10,
+        repeat: -1
+    });
+
+    this.anims.create({
+        key: 'up',
+        frames: this.anims.generateFrameNumbers('dude', { start: 29, end: 29 }),
+        frameRate: 10,
+        repeat: -1
+    });
+
+    this.anims.create({
+        key: 'down',
+        frames: this.anims.generateFrameNumbers('dude', { start: 242, end: 242 }),
+        frameRate: 10,
+        repeat: -1
+    });
+
+    this.anims.create({
+        key: 'idle',
+        frames: [ { key: 'dude', frame: 24 } ],
+        frameRate: 20
+    });
+    
+
+    cursors = this.input.keyboard.createCursorKeys();
+
+    
+
+}
+
+var choice;
+var time1=0;
+function update ()
+{
+    time1 += 1;
+    if (cursors.left.isDown && time1 > 30) //left
+        {            
+            time1 = 0;
+            player.anims.play('left', true);
+            choice = 2;
+            if(answer[choice] == answer[correct[stage]])
+            {
+                score += 1;
+                scoreText.setText('Score: ' + score);
+            }
+            stage += 1;
+            if(stage < 6)
+            {            
+                word.setTexture(answer[correct[stage]],0);
+            }
+            else
+            {
+                word.setTexture(answer[stage],0);
+            }
+
+
+
+        }
+    else if (cursors.right.isDown && time1 > 30) //right
+        {            
+            time1 = 0;
+            player.anims.play('right', true);
+            choice = 3;
+            if(answer[choice] == answer[correct[stage]])
+            {
+                score += 1;
+                scoreText.setText('Score: ' + score);
+            }
+            stage += 1;
+            if(stage < 6)
+            {            
+                word.setTexture(answer[correct[stage]],0);
+            }
+            else
+            {
+                word.setTexture(answer[stage],0);
+            }
+
+            
+        }
+    else if (cursors.up.isDown && time1 > 30) //up
+        {
+            time1 = 0;
+            player.anims.play('up', true);
+            choice = 0;
+            if(answer[choice] == answer[correct[stage]])
+            {
+                score += 1;
+                scoreText.setText('Score: ' + score);
+            }
+            stage += 1;
+            if(stage < 6)
+            {            
+                word.setTexture(answer[correct[stage]],0);
+            }
+            else
+            {
+                word.setTexture(answer[stage],0);
+            }
+
+        }
+    else if (cursors.down.isDown && time1 > 30) //down
+        {
+            time1 = 0;
+            player.anims.play('down', true);
+            choice = 1;
+            if(answer[choice] == answer[correct[stage]])
+            {
+                score += 1;
+                scoreText.setText('Score: ' + score);
+            }
+            stage += 1;
+            if(stage < 6)
+            {            
+                word.setTexture(answer[correct[stage]],0);
+            }
+            else
+            {
+                word.setTexture(answer[stage],0);
+            }
+        }
+    else
+        {
+            if(stage == 0)
+            {
+                player.anims.play('idle');
+            }
+        }
+}
+
+</script>
+
+</body>
+</html>
